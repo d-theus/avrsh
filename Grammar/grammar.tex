@@ -1,0 +1,64 @@
+\documentclass[a4paper, 12pt]{report}
+%pack{{{
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[fleqn]{amsmath}
+\usepackage{bm}
+\usepackage{tabularx}
+%}}}
+\newcommand{\ra}{\rightarrow}
+\newcolumntype{m}[1]{>{$}#1<{$}}
+\newcolumntype{t}[1]{>{\tt}#1<{}}
+\begin{document}
+\begin{tabular}{t{r}@{$\hspace{0.5cm}\ra\hspace{0.5cm}$}t{l}}
+	control & statement control\\
+		& ifst control\\
+		& loop control\\
+		& set control\\
+		& $\epsilon$ \\
+	statement 	& ID args delim \\
+	args		& ID args\\
+			& get args\\
+			& eval args\\
+			& $\epsilon$ \\
+	ifst & IF eval branch  \\
+	branch & control maybe\_branch  \\
+	maybe\_branch & ELSE control END\\
+			& ELIF eval branch \\ 
+		      & END\\
+	loop & WHILE eval control END \\
+	set & SET ID \fbox{=} ID\\
+	get & \fbox{\$}ID\\
+	getf& \fbox{\#}ID \\
+	delim & \fbox{;}\\
+	eval & \fbox{(} aexpr \fbox{)}\\
+	aexprlv & op \\
+	aexprorv& \fbox{+} op \\ 
+		& \fbox{-} op \\ 
+		& \fbox{*} op \\ 
+		& \fbox{/} op \\ 
+		& \fbox{\%} op \\ 
+		& \fbox{<} op \\ 
+		& \fbox{>} op \\ 
+		& \fbox{>=} op \\ 
+		& \fbox{<=} op \\ 
+		& \fbox{==} op \\ 
+		& \fbox{!=} op \\ 
+		& $\epsilon$\\
+	op	& NUMBER \\
+		& \fbox{'}ID\fbox{'} \\
+		& get\\
+		& getf\\
+\end{tabular}
+
+\newpage
+{\huge Legend:}\\
+
+\begin{tabular}{l l}
+	{\tt tele} 	&	non-terminal\\ 
+	{\tt TELE}	&	tokens\\
+	{\tt \fbox{boxed}}&	set of terminals\\
+	{\tt $\epsilon$}&	empty string\\
+\end{tabular}
+	
+\end{document}

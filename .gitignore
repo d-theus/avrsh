@@ -1,0 +1,9 @@
+*.o
+avrsh
+*.aux
+*.log
+*.dot
+LALR_/
+*.swp
+tags
+*.out

@@ -1,0 +1,28 @@
+echo ( $somevar );
+echo ( $ );
+echo ( $x == 5 );
+echo ( $x != 5 );
+echo ( $x >= 5 );
+echo ( $x <= 5 );
+echo ( $x > 5 );
+echo ( $x < 5 );
+echo ( $x * 5 );
+eccho ( $x * 5 );
+echo ( $x / 5 );
+echo ( $x % 5 );
+echo ( $x - 5 );
+echo ( $x + 5 );
+echo ( #x * 5 );
+echo ( #x == 5 );
+if ( $somevar == 5 ) set y = oneone; end
+if ( $somevar==5) set y = oneone; end
+if( $somevar=='lol' ) set y = oneone; end
+if( $somevar=='lol') set y = oneone; end
+if( $somevar=='lol') set y = oneone; else set y = twotwo; end
+if( $x == 5) set y = one; elif ( $y == 99 ) set x = tho; end
+if( $x == 5) set y = one elif ( $y == 99 ) set x = tho; end
+if( $x == 5) set y = one; elif ( $y == 99 ) set x = tho;
+while ( $somevar == 'lol' ) set somevar = ololo; end
+while ( $somevar == 'lol' ) set somevar = ololo end
+while ( $somevar == 'lol' ) set 5 = ololo end
+while ( $somevar = 'lol' ) set 5 = ololo end
