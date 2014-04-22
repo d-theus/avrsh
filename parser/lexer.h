@@ -11,7 +11,6 @@ unsigned short current_p;
 
 char *buffer;
 
-void lexer_match(int tok);
 int lexer_capture(char *);
 
 token_t lexer_get_tok();

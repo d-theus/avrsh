@@ -120,6 +120,11 @@ void print_unk_fun_error(int pos, char *name, char *input){
 	print_pointer(input,pos);
 }
 
+void print_und_var_error(int pos, char *name, char *input){
+	printf("Error: undefined variable '%s'\n",name);
+	print_pointer(input,pos);
+}
+
 void print_type_mism_error(int pos, char *op, char *input){
 	printf("Error: type mismatch for operator %s:\n",op);
 	print_pointer(input,pos);

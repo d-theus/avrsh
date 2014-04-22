@@ -8,7 +8,6 @@ main(int argc, char **argv){
 		printf("Nothing to do\n");
 	else
 		avrsh_init();
-		printf("Input: %s\n", argv[1]);
 		parse(argv[1]);
 		avrsh_shutdown();
 		printf("Success\n");

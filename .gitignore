@@ -7,3 +7,4 @@ LALR_/
 *.swp
 tags
 *.out
+*.toc

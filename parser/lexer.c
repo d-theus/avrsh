@@ -3,6 +3,29 @@
 
 #include "operations.c"
 
+void _token_set_simple(int type){
+	lexer_current_tok.type = type;
+}
+
+void _token_set_id(const char *val){
+	lexer_current_tok.type = tID;
+	lexer_current_tok.val.str = strdup(val);
+}
+
+void _token_set_num(){
+	lexer_current_tok.type = tNUMBER;
+}
+
+void _token_set_opr(int type, const char *opstr,
+		avrsh_str_t (*nf)(avrsh_num_t, avrsh_num_t),
+		avrsh_str_t (*sf)(avrsh_str_t, avrsh_str_t)
+		){
+	lexer_current_tok.type = type;
+	strcpy(lexer_current_tok.val.opr.str,opstr);
+	lexer_current_tok.val.opr.fun_n = nf;
+	lexer_current_tok.val.opr.fun_s = sf;
+}
+
 int lexer_capture(char *input){
 	buffer = input;
 	current_c = input[0];
@@ -20,8 +43,9 @@ void advance() {
 }
 
 token_t lexer_get_tok() {
-	if(lexer_current_tok.type == tID && lexer_current_tok.str != NULL){
-		free(lexer_current_tok.str);
+	if(lexer_current_tok.type == tID && lexer_current_tok.val.str != NULL){
+		free(lexer_current_tok.val.str);
+		lexer_current_tok.val.str = NULL;
 	}
 
 	size_t len = strlen(buffer);
@@ -30,100 +54,105 @@ token_t lexer_get_tok() {
 		return lexer_current_tok;
 	}
 	while(isspace(current_c) && current_p < len) advance();
+
+	lexer_current_tok.pos = current_p;
+
+	//SIMPLE
 	if(current_c == ';'){
 		advance();
-		lexer_current_tok.type = tDELIM;
+		_token_set_simple(tDELIM);
 		return lexer_current_tok;
 	}
 	if(current_c == '$'){
 		advance();
-		lexer_current_tok.type = tDOLL;
+		_token_set_simple(tDOLL);
 		return lexer_current_tok;
 	}
 	if(current_c == '#'){
 		advance();
-		lexer_current_tok.type = tSHAR;
+		_token_set_simple(tSHAR);
 		return lexer_current_tok;
 	}
 	if(current_c == '('){
 		advance();
-		lexer_current_tok.type = tLP;
+		_token_set_simple(tLP);
 		return lexer_current_tok;
 	}
 	if(current_c == ')'){
 		advance();
-		lexer_current_tok.type = tRP;
+		_token_set_simple(tRP);
 		return lexer_current_tok;
 	}
+	if(current_c == '\''){
+		advance();
+		_token_set_simple(tSQUOTE);
+		return lexer_current_tok;
+	}
+	//OPERATORS
 	if(current_c == '<'){
 		advance();
 		if(current_c == '='){
 			advance();
-			lexer_current_tok.type = tOP_LEQ;
+			_token_set_opr(tOP_LEQ,"<=",_op_leq_n,_op_leq_s);
 			return lexer_current_tok;
 		}
-		lexer_current_tok.type = tOP_LT;
+		_token_set_opr(tOP_LT, "<", _op_lt_n, _op_lt_s);
 		return lexer_current_tok;
 	}
 	if(current_c == '>'){
 		advance();
 		if(current_c == '='){
 			advance();
-			lexer_current_tok.type = tOP_GEQ;
+			_token_set_opr(tOP_GEQ,">=",_op_geq_n, _op_geq_s);
 			return lexer_current_tok;
 		}
-		lexer_current_tok.type = tOP_GT;
+		_token_set_opr(tOP_GT,"<", _op_gt_n, _op_gt_s);
 		return lexer_current_tok;
 	}
 	if(current_c == '='){
 		advance();
 		if(current_c == '='){
 			advance();
-			lexer_current_tok.type = tOP_EQ;
+			_token_set_opr(tOP_EQ,"==",_op_eq_n, _op_eq_s);
 			return lexer_current_tok;
 		}
-		lexer_current_tok.type = tEQ;
+		_token_set_simple(tEQ);
 		return lexer_current_tok;
 	}
 	if(current_c == '+'){
 		advance();
-		lexer_current_tok.type = tOP_PLUS;
+		_token_set_opr(tOP_PLUS,"+",_op_plus,NULL);
 		return lexer_current_tok;
 	}
 	if(current_c == '-'){
 		advance();
-		lexer_current_tok.type = tOP_MINUS;
+		_token_set_opr(tOP_MINUS,"-", _op_minus,NULL);
 		return lexer_current_tok;
 	}
 	if(current_c == '*'){
 		advance();
-		lexer_current_tok.type = tOP_TIMES;
+		_token_set_opr(tOP_TIMES, "*",_op_times,NULL);
 		return lexer_current_tok;
 	}
 	if(current_c == '/'){
 		advance();
-		lexer_current_tok.type = tOP_DIV;
+		_token_set_opr(tOP_DIV,"/",_op_div,NULL);
 		return lexer_current_tok;
 	}
 	if(current_c == '%'){
 		advance();
-		lexer_current_tok.type = tOP_MOD;
+		_token_set_opr(tOP_MOD, "%", _op_mod,NULL);
 		return lexer_current_tok;
 	}
 	if(current_c == '!'){
 		advance();
 		if(current_c == '='){
 			advance();
-			lexer_current_tok.type = tOP_NEQ;
+			_token_set_opr(tOP_NEQ,"!=", _op_neq_n, _op_neq_s);
 			return lexer_current_tok;
 		}
 		print_lexical_error(current_p-1, buffer);
 		avrsh_error();
-	}
-	if(current_c == '\''){
-		advance();
-		lexer_current_tok.type = tSQUOTE;
-		return lexer_current_tok;
 	}
 
 	/* handling numbers */
@@ -136,17 +165,10 @@ token_t lexer_get_tok() {
 			end ++;
 		}while(isdigit(current_c));
 		if(current_c == '.'){//floating point?
-			if( isdigit(buffer[current_p+1]) ){//ensure digit goes after .TODO:handle possible segfaults
-				unsigned short fbegin = current_p;
-				unsigned short fend = current_p;
-				do{
-					advance();
-					fend ++;
-				}while(isdigit(current_c));
-			}
+			print_lexical_error(current_p, buffer);
 		}
 		lexer_current_tok.type = tNUMBER;
-		lexer_current_tok.num = atof(&buffer[begin]);
+		lexer_current_tok.val.num = atoi(&buffer[begin]);
 		return lexer_current_tok;
 	} //if number 
 
@@ -185,7 +207,6 @@ token_t lexer_get_tok() {
 	}
 
 	lexer_current_tok.type = tID;
-	lexer_current_tok.str = (avrsh_str_t)malloc(strlen(word)+1);
-	strcpy(lexer_current_tok.str,word);
+	lexer_current_tok.val.str = strdup(word);
 	return lexer_current_tok;
 }

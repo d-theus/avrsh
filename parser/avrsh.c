@@ -16,22 +16,23 @@ void avrsh_ftable_insert(char *name, void (*f)(int,char**)){
 	HASH_FIND_STR(ftable,name,nf);
 	if(nf==NULL){
 		nf = (avrsh_function_t*)malloc(sizeof(avrsh_function_t));
-		nf->name = (char*)malloc(strlen(name)+1);
-		strcpy(nf->name,name);
+		nf->name = strdup(name);
 		nf->func = f;
 	}
 	HASH_ADD_KEYPTR(hh, ftable, nf->name, strlen(nf->name),nf);
 }
 void avrsh_vtable_insert(char *name, char *value){
 	avrsh_variable_t *nv;
-	HASH_FIND_STR(ftable,name,nv);
+	HASH_FIND_STR(vtable,name,nv);
 	if(nv==NULL){
 		nv = (avrsh_variable_t*)malloc(sizeof(avrsh_variable_t));
-		nv->name = (char*)malloc(strlen(name)+1);
-		strcpy(nv->name,name);
-		strcpy(nv->value, value);
+		nv->name = strdup(name);
+		nv->value = strdup(value);
+		HASH_ADD_KEYPTR(hh, vtable, nv->name, strlen(nv->name), nv);
+	}else{
+		free(nv->value);
+		nv->value = strdup(value);
 	}
-	HASH_ADD_KEYPTR(hh, vtable, nv->name, strlen(nv->name), nv);
 }
 
 void avrsh_ftable_delete(char *name){
@@ -49,6 +50,7 @@ void avrsh_vtable_delete(char *name){
 	if(ent != NULL){
 		HASH_DEL(vtable,ent);
 		free(ent->name);
+		free(ent->value);
 		free(ent);
 	}
 }
@@ -66,6 +68,7 @@ void avrsh_vtable_clear(){
 	HASH_ITER(hh,vtable,s,tmp){
 		HASH_DEL(vtable, s);
 		free(s->name);
+		free(s->value);
 		free(s);
 	}
 }
@@ -73,8 +76,8 @@ void avrsh_vtable_clear(){
 void _avrsh_function_echo(int argc, char **argv){
 #ifndef AVR
 	int i;
-	for(i = 0; i < argc; i++){
-		printf("%s", argv[i]);
+	for(i = 1; i < argc; i++){
+		printf("%s\n", argv[i]);
 	}
 #endif
 }

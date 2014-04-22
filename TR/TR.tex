@@ -17,7 +17,8 @@
 \begin{document}
 
 \author{Дорофеев Андрей}
-\title{Техническое задание на создание системы <<командная оболочка>>} %TODO: Something original goes here
+\title{Техническое задание на создание системы <<Интерпретатор коммандной оболочки для встраиваемых систем на базе 
+микросхем семейства AVR>>}
 \date{\today}
 \maketitle
 
@@ -75,24 +76,21 @@
 Система должна предоставлять возможность интерпретировать текстовые команды в ASCII-кодировке.
 Среди конструкций языка должны присутствовать следующие:
 \begin{enumerate}
-	\item оператор присвоения {\tt set \_=\_}
-	\item оператор разыменовывания {\tt \$\_}
-	\item вызов встроенной функции
-	\item операторы ветвления {\tt if-fi, else, elif}
-	\item операторы работы со строками {\tt +, =}
-	\item оператор вычисления-подстановки {\tt ( \_ )}
-	\item оператор вычисления логических выражений {\tt [ \_ ]}
-	\item экранирование командных последовательностей
+	\item оператор присваивания {\tt set \_=\_};
+	\item оператор разыменовывания {\tt \$\_} и {\tt \#\_};
+	\item вызов заранее добавленной функции;
+	\item операторы ветвления {\tt if, else, elif};
+	\item оператор вычисления-подстановки {\tt ( \_ )};
+		поддерживающий операции {\tt ==, !=, >, <, >=, <=, +, -, *, /, \%}.
 \end{enumerate}
 
 Пример -- несколько команд на специализированном языке:
 \begin{itemize}
-	\item {\tt echo this is string}
-	\item {\tt set\_port -p A --binary-value 00100100}
-	\item {\tt while [:] ; do echo "Some action"; sleep 1; done}
-	\item {\tt set var=middle; echo left(\$var)right}
-	\item {\tt exec user\_function ar1 ar2}
-	\item {\tt if [ \$i = 1 ]; then sleep 1; elif [\$i = 2]; then sleep 2; else sleep 3; fi ;}
+	\item {\tt echo this is string;}
+	\item {\tt set\_port -p A --binary-value 00100100;}
+	\item {\tt while ( \#time < 10 ) sleep 1; get\_time time; end}
+	\item {\tt set var=middle; echo left \$var right;}
+	\item {\tt if ( \$i == 1 ) sleep 1; elif (\$i == 2) sleep 2; else sleep 3; end}
 \end{itemize}
 
 Система <<командная оболочка>> должна иметь следующие подсистемы:

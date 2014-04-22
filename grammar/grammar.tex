@@ -1,0 +1,25 @@
+\documentclass[a4paper, 12pt]{report}
+%pack{{{
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage[fleqn]{amsmath}
+\usepackage{bm}
+\usepackage{tabularx}
+%}}}
+\newcommand{\ra}{\rightarrow}
+\newcolumntype{m}[1]{>{$}#1<{$}}
+\newcolumntype{t}[1]{>{\tt}#1<{}}
+\begin{document}
+\input{rules.tex}
+
+\newpage
+{\huge Legend:}\\
+
+\begin{tabular}{l l}
+	{\tt tele} 	&	non-terminal\\ 
+	{\tt TELE}	&	tokens\\
+	{\tt \fbox{boxed}}&	set of terminals\\
+	{\tt $\epsilon$}&	empty string\\
+\end{tabular}
+	
+\end{document}

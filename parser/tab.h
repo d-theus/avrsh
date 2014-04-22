@@ -43,11 +43,12 @@
 
 typedef struct token_t {
 	int type;
+	int pos;
 	union{
 		avrsh_str_t str;
 		avrsh_num_t num;
 		avrsh_operator_t opr;
-	};
+	} val;
 } token_t;
 
 #endif

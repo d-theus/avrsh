@@ -1,22 +1,11 @@
-\documentclass[a4paper, 12pt]{report}
-%pack{{{
-\usepackage[utf8]{inputenc}
-\usepackage[russian]{babel}
-\usepackage[fleqn]{amsmath}
-\usepackage{bm}
-\usepackage{tabularx}
-%}}}
-\newcommand{\ra}{\rightarrow}
-\newcolumntype{m}[1]{>{$}#1<{$}}
-\newcolumntype{t}[1]{>{\tt}#1<{}}
-\begin{document}
+
 \begin{tabular}{t{r}@{$\hspace{0.5cm}\ra\hspace{0.5cm}$}t{l}}
 	control & statement control\\
 		& ifst control\\
 		& loop control\\
 		& set control\\
 		& $\epsilon$ \\
-	statement 	& ID args delim \\
+	statement 	& ID args DELIM \\
 	args		& ID args\\
 			& get args\\
 			& eval args\\
@@ -29,8 +18,7 @@
 	loop & WHILE eval control END \\
 	set & SET ID \fbox{=} ID\\
 	get & \fbox{\$}ID\\
-	getf& \fbox{\#}ID \\
-	delim & \fbox{;}\\
+	getn& \fbox{\#}ID \\
 	eval & \fbox{(} aexpr \fbox{)}\\
 	aexprlv & op \\
 	aexprorv& \fbox{+} op \\ 
@@ -48,17 +36,5 @@
 	op	& NUMBER \\
 		& \fbox{'}ID\fbox{'} \\
 		& get\\
-		& getf\\
+		& getn\\
 \end{tabular}
-
-\newpage
-{\huge Legend:}\\
-
-\begin{tabular}{l l}
-	{\tt tele} 	&	non-terminal\\ 
-	{\tt TELE}	&	tokens\\
-	{\tt \fbox{boxed}}&	set of terminals\\
-	{\tt $\epsilon$}&	empty string\\
-\end{tabular}
-	
-\end{document}
