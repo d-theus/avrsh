@@ -5,13 +5,16 @@
 #include "printer.h"
 #include "avrsh.h"
 
-void parse(char *buf);
+
+
+void parser_parse(char *buf);
+jmp_buf end_of_parse;
 
 token_t match(int);
 
 int g_control(int);
 int g_statement();
-int g_args(int *argc, char **argv);
+int g_args(int *argcp, char ***argvp);
 int g_ifst();
 int g_branch(int);
 int g_maybe_branch(int);

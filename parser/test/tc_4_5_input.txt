@@ -1,0 +1,6 @@
+echo $x;
+set x = 5; echo $x;
+set x = 5; echo $x; echo $x;
+set x = one; echo ( $x );
+set x = 5; echo ( #x );
+

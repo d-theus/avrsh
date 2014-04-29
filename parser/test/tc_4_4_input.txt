@@ -1,0 +1,4 @@
+somefunc arg arg;
+echo arg;
+echo arg reag third?;
+myfunction arg rag;

@@ -1,0 +1,5 @@
+set x = 5; echo $x;
+set x = 5; echo $x; set y = 5; echo $y;
+set x = 5; set y = 5; set z = 5; echo $x; echo $y; echo $z;
+set x = 5; set x = 5;
+

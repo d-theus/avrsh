@@ -1,0 +1,14 @@
+set x = 5;
+set x = 5; echo $x;
+echo ('t');
+echo (#5);
+echo ('someval');
+echo (5 + 1);
+echo (5 - 1);
+echo (5 / 1);
+echo (5 % 2);
+echo (5 * 2);
+echo ( 5 == 4);
+if ('t') echo true; else echo false; end
+while ('f') echo true; end
+set x = 0; while (x < 5) echo $x; set x = (#x + 1); end

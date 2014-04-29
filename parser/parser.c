@@ -1,8 +1,11 @@
 #include "parser.h"
 
-void parse(char *buf){
+void parser_parse(char *buf){
 	lexer_capture(buf);
-	g_control(0);
+	if(setjmp(end_of_parse) == 0)
+		g_control(0);
+	else
+		return;
 }
 
 token_t match(int c){
@@ -89,7 +92,7 @@ int g_statement(){
 	int argc = 1;
 	char **argv = (char**)malloc(sizeof(char*));
 	argv[0] = strdup(ident.val.str);
-	g_args(&argc,argv);
+	g_args(&argc,&argv);
 
 	match(tDELIM);
 
@@ -103,7 +106,7 @@ int g_statement(){
 	free(ident.val.str);
 }
 
-int g_args(int *argc, char **argv){
+int g_args(int *argcp, char ***argvp){
 	if ( lexer_current_tok.type == 0){
 		lexer_get_tok();
 	}
@@ -126,13 +129,13 @@ int g_args(int *argc, char **argv){
 			print_syntax_error(lexer_current_tok.type, current_p, buffer);
 			avrsh_error();
 	}
-	int c = *argc;
-	char **tmp = (char**)realloc(argv,(c+1) * sizeof(char*));
+	int c = *argcp;
+	char **tmp = (char**)realloc(*argvp,(c+1) * sizeof(char*));
 	if (tmp != NULL)
-		argv = tmp;
-	argv[c] = strdup(arg);
-	(*argc)++;
-	g_args(argc,argv);
+		*argvp = tmp;
+	(*argvp)[c] = strdup(arg);
+	(*argcp)++;
+	g_args(argcp,argvp);
 	free(arg);
 }
 

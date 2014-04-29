@@ -1,0 +1,7 @@
+echo shi;
+echo ('shi');
+echo ( 5 );
+set x = 5; echo $x;
+set x = 5; echo (#x);
+if ('t') echo true; elif ('t') echo tf; else echo ff; end
+while ( 'f' ) echo False; end

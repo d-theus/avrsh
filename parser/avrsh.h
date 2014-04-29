@@ -2,6 +2,7 @@
 #define AVRSH_H
  
 #include <stdlib.h>
+#include <setjmp.h>
 
 #include "tab.h"
 #include "types.h"
@@ -24,6 +25,11 @@ typedef struct avrsh_variable_t {
 avrsh_function_t *ftable;
 avrsh_variable_t *vtable;
 
+extern jmp_buf end_of_parse;
+
+int (*avrsh_printf)(const char*, ...);
+void (*avrsh_error)(void);
+
 avrsh_function_t *avrsh_ftable_find(char *name);
 avrsh_variable_t *avrsh_vtable_find(char *name);
 
@@ -37,7 +43,7 @@ void avrsh_ftable_clear();
 void avrsh_vtable_clear();
 
 void avrsh_init();
-void avrsh_shutdown();
-void avrsh_error();
+void avrsh_set_printf_func(int (*f)(const char *fmt, ...));
+void avrsh_set_handler_error(void (*f)(void));
 
 #endif

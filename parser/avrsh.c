@@ -72,21 +72,17 @@ void avrsh_vtable_clear(){
 		free(s);
 	}
 }
+void avrsh_set_printf_func(int (*f)(const char* fmt, ...)){
+	avrsh_printf = f;
+}
 
 void _avrsh_function_echo(int argc, char **argv){
 #ifndef AVR
 	int i;
 	for(i = 1; i < argc; i++){
-		printf("%s\n", argv[i]);
+		avrsh_printf("%s\n", argv[i]);
 	}
 #endif
-}
-
-void avrsh_init(){
-	ftable = NULL;
-	vtable = NULL;
-
-	avrsh_ftable_insert("echo",_avrsh_function_echo);
 }
 
 void avrsh_shutdown(){
@@ -94,7 +90,18 @@ void avrsh_shutdown(){
 	avrsh_vtable_clear();
 }
 
-void avrsh_error(){
-	avrsh_shutdown();
-	exit(-1);
+void _avrsh_error_default(){
+	longjmp(end_of_parse,1);
 }
+
+void avrsh_init(){
+	ftable = NULL;
+	vtable = NULL;
+
+	avrsh_error = _avrsh_error_default;
+	avrsh_set_printf_func(printf);
+
+	avrsh_ftable_insert("echo",_avrsh_function_echo);
+}
+
+
